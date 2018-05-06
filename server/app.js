@@ -4,6 +4,14 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require('mongoose')
+// const url = 'mongodb://localhost/todo'
+const url = 'mongodb://todoAdmin:pr4mb4n4n@ds113200.mlab.com:13200/todo'
+
+mongoose.connect(url, (err) => {
+  if(!err) console.log('connected to database')
+  else throw new Error(err)
+})
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
