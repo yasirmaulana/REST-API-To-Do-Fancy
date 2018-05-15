@@ -1,17 +1,35 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true },
+    email: { 
+        type: String,
+        trim: true,
+        lowercase: true,
+        required: true 
+    },
+    password: { 
+        type: String
+    },
     confirmed: Boolean,
-    token: String,
-    role: { type: String, default: 'user' },
-    created: { type: Date, default: Date.now },
-    updated: { type: Date, default: Date.now }
+    // token: String,
+    // role: { 
+    //     type: String, 
+    //     default: 'user' 
+    // },
+    created: { 
+        type: Date, 
+        default: Date.now 
+    },
+    updated: { 
+        type: Date, 
+        default: Date.now 
+    }
 })
+ 
+const User = mongoose.model('user', userSchema)
 
-const user = mongoose.model('user', userSchema)
-
-module.exports = user
+module.exports = User

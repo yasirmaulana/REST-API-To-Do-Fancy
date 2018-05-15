@@ -1,78 +1,141 @@
-const user = require('../models/user.model')
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const { hasher } = require('../helpers/encrypt')
-const rahasia = process.env.secret
+const User      = require('../models/user.model')
+const Todo      = require('../models/todo.model')
+const mongoose  = require('mongoose')
+// const bcrypt    = require('bcrypt')
+// const jwt       = require('jsonwebtoken')
+const { hasher }  = require('../helpers/hashPassword.helper')
+// const rahasia   = process.env.secret
 
 module.exports = {
-    userSignUp: ( req, res, next ) => {
-        user.find({
-            username: req.body.username
-        })
+    userSignUp: ( req, res ) => {
+        User.find({
+            email: req.body.email
+        }) 
         .then( userSelect => {
+            console.log(req.body)
             if( userSelect.length === 0 ){
-                userObj = {
-                    username: req.body.username,
+                let userObj = {
+                    email: req.body.email,
                     password: hasher(req.body.password)
                 }
-                // console.log(userObj)                
-                const newUser = new user(userObj)
+
+                const newUser = new User(userObj)
                 newUser.save()
-                .then( userInserted => {
-                    let token = jwt.sign({
-                        id: userSelected[0]._id,
-                        username: userSelected[0].username,
-                        role: userSelected[0].role 
-                    }, rahasia)
-                    res.status(200).json({
+                 .then( userInserted => {
+                    //  console.log(userInserted)
+                    res.status(201).json({
                         message: "signup success",
-                        token: token
+                        data: userInserted
                     })
-                })
-                .catch( error => console.log('ini error waktu signup:',error) )
+                 })
+                 .catch( error => {
+                    //  const message = error.response.data
+                    console.log(error)
+                 })
             }
             else{
                 console.log('username sudah ada coy...')
             }
         })
-        .catch( error => console.log('ini error waktu find di proses signup:',error))
+        .catch( error => {
+            // const message = error.response.data
+            console.log(error)
+        })
     },
-    userSignIn: ( req, res, next ) => {
-        user.find({
-            username: req.body.username
+
+    userSignIn: ( req, res ) => {
+        User.findOne({
+            email: req.body.email
         })
         .then( userSelected => {
-            if(userSelected){
-                // console.log('ini data username:', userSelected)
-            
-                let cekPass = bcrypt.compareSync(req.body.password, userSelected[0].password)
-                // console.log('ini console.log cekPass:',cekPass)
-                if(cekPass){
-                    let token = jwt.sign({
-                        id: userSelected[0]._id,
-                        username: userSelected[0].username,
-                        role: userSelected[0].role 
-                    }, rahasia)
-                    console.log('ini hasil proses token:',token)
-                    res.status(200).json({
-                        message: "user signIn",
-                        token: token
-                    })
-                }
-                else{
-                    res.status(404).json({
-                        message: "username or password is wrong!!!"
-                    })
-                }
+            let cekPass = bcrypt.compareSync(req.body.password, userSelected.password)
+            if(cekPass){
+                let token = jwt.sign({
+                    id: userSelected._id,
+                    email: userSelected.email,
+                }, rahasia)
+                res.status(200).json({
+                    message: "User signIn",
+                    token: token
+                })
             }
             else{
-                res.status(401).json({
-                    message: "username belum terdaftar",
-                    data: userSelected
+                res.status(404).json({
+                    message: "password is wrong!!!"
                 })
             }
         })
-        .catch( error => console.log(error))
+        .catch( error => {
+            // const message = error.respone.data
+            res.send(error)
+        })
+    },
+    showTodo: ( req, res ) => {
+        Todo.find({user: req.user.id})
+         .then( todos => {
+             res.status(200).json({
+                 message: "list todo",
+                 data: todos
+             })
+         })
+         .catch( error => console.log(error))
+    },
+
+    inputTodo: ( req, res ) => {
+        let todoObj = {
+            user: req.user.id,
+            task: req.body.task
+        }
+        const newTask = new Todo(todoObj)
+        newTask.save()
+         .then( newtodo => {
+             res.status(201).json({
+                 message: "input todo success",
+                 data: newtodo
+             })
+         })
+         .catch( error => console.log(error)) 
+    },
+
+    updateTodo: ( req, res ) => {
+        Todo.findOneAndUpdate({
+            _id: req.params.id
+        }, { 
+            $set: {
+                task: req.body.task
+            }
+        }, (err, result) => {
+            if(err) {
+                res.status(406).json({
+                    message: "not acceptable",
+                    data: err
+                })
+            }
+            else {
+                res.status(200).json({
+                    message: "update success",
+                    data: result
+                })
+            }
+        })
+    },
+
+    deleteTodo: ( req, res ) => {
+        Todo.findOneAndRemove({
+            _id: req.params.id
+        }, (err, result) => {
+            if(err) {
+                res.status(406).json({
+                    message: "not acceptable",
+                    data: err
+                })
+            }
+            else {
+                res.status(200).json({
+                    message: "delete success",
+                    data: result
+                })
+            }    
+        })
     }
 }
