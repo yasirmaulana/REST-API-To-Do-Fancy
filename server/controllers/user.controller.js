@@ -1,10 +1,10 @@
 const User      = require('../models/user.model')
 const Todo      = require('../models/todo.model')
 const mongoose  = require('mongoose')
-// const bcrypt    = require('bcrypt')
-// const jwt       = require('jsonwebtoken')
+const bcrypt    = require('bcrypt')
+const jwt       = require('jsonwebtoken')
 const { hasher }  = require('../helpers/hashPassword.helper')
-// const rahasia   = process.env.secret
+const rahasia   = process.env.secret
 
 module.exports = {
     userSignUp: ( req, res ) => {
@@ -48,6 +48,7 @@ module.exports = {
             email: req.body.email
         })
         .then( userSelected => {
+            // console.log(userSelected)
             let cekPass = bcrypt.compareSync(req.body.password, userSelected.password)
             if(cekPass){
                 let token = jwt.sign({

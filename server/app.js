@@ -5,6 +5,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose')
+const cors = require('cors')
+
 // const url = 'mongodb://localhost/todo'
 const url = 'mongodb://todoUser:password@ds113200.mlab.com:13200/todo'
 
@@ -13,12 +15,12 @@ mongoose.connect(url, (err) => {
   else throw new Error(err)
 })
 
-
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
 
+app.use(cors())
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
