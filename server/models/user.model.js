@@ -5,30 +5,20 @@ const saltRounds = 10
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    email: { 
-        type: String,
-        trim: true,
-        lowercase: true,
-        required: true 
+        email: { 
+            type: String,
+            trim: true,
+            lowercase: true,
+            required: true 
+        },
+        password: { 
+            type: String
+        },
+        hp: String,
+        confirmed: Boolean,
     },
-    password: { 
-        type: String
-    },
-    confirmed: Boolean,
-    // token: String,
-    // role: { 
-    //     type: String, 
-    //     default: 'user' 
-    // },
-    created: { 
-        type: Date, 
-        default: Date.now 
-    },
-    updated: { 
-        type: Date, 
-        default: Date.now 
-    }
-})
+    {timestamps: true}     
+)
 
  
 const User = mongoose.model('user', userSchema)

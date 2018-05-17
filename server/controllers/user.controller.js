@@ -16,9 +16,10 @@ module.exports = {
             if( userSelect.length === 0 ){
                 let userObj = {
                     email: req.body.email,
-                    password: hasher(req.body.password)
+                    password: hasher(req.body.password),
+                    hp: req.body.hp
                 }
-
+            
                 const newUser = new User(userObj)
                 newUser.save()
                  .then( userInserted => {
@@ -85,7 +86,8 @@ module.exports = {
     inputTodo: ( req, res ) => {
         let todoObj = {
             user: req.user.id,
-            task: req.body.task
+            task: req.body.task,
+            deadline: req.body.deadline
         }
         const newTask = new Todo(todoObj)
         newTask.save()
@@ -103,7 +105,7 @@ module.exports = {
             _id: req.params.id
         }, { 
             $set: {
-                task: req.body.task
+                completed: req.body.completed
             }
         }, (err, result) => {
             if(err) {
