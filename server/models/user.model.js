@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const saltRounds = 10
+// const bcrypt = require('bcrypt')
+// const saltRounds = 10
 
 const Schema = mongoose.Schema
 
@@ -20,7 +20,6 @@ const userSchema = new Schema({
     {timestamps: true}     
 )
 
- 
 const User = mongoose.model('user', userSchema)
 
 module.exports = User

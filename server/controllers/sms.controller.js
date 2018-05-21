@@ -32,13 +32,19 @@ module.exports = {
             })
     },
     getNumber: ( req, res ) => {
+        let newDate = new Date().getDate()+1
+        // console.log('>>>>>>>>>',newDate)
         Todo.find({
-            completed: false
-            // deadline: e 
+            completed: false,
         })
         .then( todosDeadline => {
-            console.log('>>>>>>>>>', todosDeadline[0].deadline.toLocaleDateString())
-            console.log('=========', new Date().toLocaleDateString())
+            // let ids = []
+            // todosDeadline.forEach(function(todo){
+            //     ids.push(todo.user)
+            // })
+
+            var uniqueItems = Array.from(new Set(todosDeadline.user))
+            console.log('>>>>>', uniqueItems)
 
         })
         .catch(error => {

@@ -1,13 +1,13 @@
+// const mongoose  = require('mongoose')
 const User      = require('../models/user.model')
 const Todo      = require('../models/todo.model')
-const mongoose  = require('mongoose')
 const bcrypt    = require('bcrypt')
 const jwt       = require('jsonwebtoken')
 const { hasher }  = require('../helpers/hashPassword.helper')
 const rahasia   = process.env.secret
 
 module.exports = {
-    userSignUp: ( req, res ) => {
+    userSignUp: ( req, res ) => { 
         User.find({
             email: req.body.email
         }) 

@@ -7,9 +7,12 @@ const logger = require('morgan');
 const mongoose = require('mongoose')
 const cors = require('cors')
 const Nexmo = require('nexmo')
+const userDb   = process.env.userDb
+const passwordDB   = process.env.passwordDB
+const host = process.env.host
 
 // const url = 'mongodb://localhost/todo'
-const url = 'mongodb://todoUser:password@ds113200.mlab.com:13200/todo'
+const url = `mongodb://${userDb}:${passwordDB}@${host}/todo`
 
 mongoose.connect(url, (err) => {
   if(!err) console.log('connected to database')
