@@ -44,6 +44,27 @@ module.exports = {
         })
     },
 
+    userSignUpFB: ( req, res ) => { 
+        console.log(req.body)
+        let userObj = {
+            email: req.body.email,
+        }
+    
+        const newUser = new User(userObj)
+        newUser.save()
+            .then( userInserted => {
+                console.log(userInserted)
+                res.status(201).json({
+                    message: "signup FB success",
+                    data: userInserted
+                })
+            })
+            .catch( error => {
+                const message = error.response.data
+                console.log(error)
+            })
+    },
+
     userSignIn: ( req, res ) => {
         User.findOne({
             email: req.body.email
@@ -72,6 +93,23 @@ module.exports = {
             res.send(error)
         })
     },
+
+    userSignInFB: ( req, res ) => {
+        User.findOne({
+            email: req.body.email
+        })
+        .then( userSelected => {
+            // console.log(userSelected)
+                res.status(200).json({
+                    message: "User signIn",
+                    token: token
+                })
+        })
+        .catch( error => {
+            res.send(error)
+        })
+    },
+
     showTodo: ( req, res ) => {
         Todo.find({user: req.user.id})
          .then( todos => {

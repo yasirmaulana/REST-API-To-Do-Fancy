@@ -6,7 +6,7 @@ const nexmoApiKey = process.env.NEXMO_API_KEY
 const nexmoApiSecret = process.env.NEXMO_API_SECRET
 
 module.exports = {
-    sendSms: ( req, res ) => {
+    sendSms: ( number ) => {
         let to = 6281586245143
         let url = 'https://rest.nexmo.com/sms/json'
         let jsonTxt = {
@@ -15,7 +15,7 @@ module.exports = {
             "to":`${to}`,
             "from":"todo.yasirjs.com",
             "text":"kindly remainder, you still have unfinished todo list"
-        }
+        } 
         
         axios
             .post(url, jsonTxt)
@@ -32,7 +32,7 @@ module.exports = {
             })
     },
     getNumber: ( req, res ) => {
-        let newDate = new Date().getDate()+1
+        // let newDate = new Date().getDate()+1
         // console.log('>>>>>>>>>',newDate)
         Todo.find({
             completed: false,
@@ -45,7 +45,9 @@ module.exports = {
 
             var uniqueItems = Array.from(new Set(todosDeadline.user))
             console.log('>>>>>', uniqueItems)
+            
 
+            // sendSms(number)
         })
         .catch(error => {
             console.log(error)

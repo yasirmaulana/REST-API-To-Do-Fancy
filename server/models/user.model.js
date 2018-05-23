@@ -15,7 +15,7 @@ const userSchema = new Schema({
             type: String
         },
         hp: String,
-        confirmed: Boolean,
+        // confirmed: Boolean,
     },
     {timestamps: true}     
 )

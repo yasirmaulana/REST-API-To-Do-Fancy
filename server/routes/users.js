@@ -2,7 +2,9 @@ const express = require('express')
 const router = express.Router()
 const {
   userSignUp,
+  userSignUpFB,
   userSignIn,
+  userSignInFB,
   showTodo,
   inputTodo,
   updateTodo,
@@ -17,7 +19,9 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource')
 })
 router.post('/signup', userSignUp)
+router.post('/signupfb', userSignUpFB)
 router.post('/signin', userSignIn)
+router.post('/signinfb', userSignInFB)
 router.get('/showtodo', isLogin, showTodo)
 router.post('/inputtodo', isLogin, inputTodo)
 router.put('/update/:id', isLogin, updateTodo)

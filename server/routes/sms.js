@@ -8,4 +8,4 @@ const {
 router.get('/number', getNumber)
 router.post('/send', sendSms)
 
-module.exports = router 
+module.exports = router  
