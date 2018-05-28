@@ -31,7 +31,7 @@ module.exports = {
                  })
                  .catch( error => {
                     //  const message = error.response.data
-                    console.log(error)
+                    res.send(error)
                  })
             }
             else{
@@ -43,7 +43,7 @@ module.exports = {
         })
         .catch( error => {
             // const message = error.response.data
-            console.log(error)
+            res.send('enter yet',error)
         })
     },
 
