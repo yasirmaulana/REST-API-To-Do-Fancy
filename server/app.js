@@ -11,8 +11,8 @@ const userDb   = process.env.userDb
 const passwordDB   = process.env.passwordDB
 const host = process.env.host
 
-// const url = 'mongodb://localhost/todo'
-const url = `mongodb://${userDb}:${passwordDB}@${host}/todo`
+const url = 'mongodb://localhost/todo'
+// const url = `mongodb://${userDb}:${passwordDB}@${host}/todo`
 
 mongoose.connect(url, (err) => {
   if(!err) console.log('connected to database')

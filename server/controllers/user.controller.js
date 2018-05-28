@@ -1,4 +1,4 @@
-// const mongoose  = require('mongoose')
+// const mongoose  = require('mongoose') 
 const User      = require('../models/user.model')
 const Todo      = require('../models/todo.model')
 const bcrypt    = require('bcrypt')
