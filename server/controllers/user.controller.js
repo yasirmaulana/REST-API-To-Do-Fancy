@@ -36,6 +36,9 @@ module.exports = {
             }
             else{
                 console.log('username sudah ada coy...')
+                res.status(400).json({
+                    message: 'username already exist'
+                })
             }
         })
         .catch( error => {
