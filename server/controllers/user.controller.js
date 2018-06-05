@@ -5,8 +5,9 @@ const bcrypt    = require('bcrypt')
 const jwt       = require('jsonwebtoken')
 const { hasher }  = require('../helpers/hashPassword.helper')
 const rahasia   = process.env.secret
-
-module.exports = {
+const passDefault = process.env.passwordDefault
+ 
+module.exports = { 
     userSignUp: ( req, res ) => { 
         User.find({
             email: req.body.email
@@ -39,7 +40,7 @@ module.exports = {
                 res.status(400).json({
                     message: 'username already exist'
                 })
-            }
+            } 
         })
         .catch( error => {
             // const message = error.response.data
@@ -47,34 +48,22 @@ module.exports = {
         })
     },
 
-    userSignUpFB: ( req, res ) => { 
-        console.log(req.body)
-        let userObj = {
-            email: req.body.email,
-        }
-    
-        const newUser = new User(userObj)
-        newUser.save()
-            .then( userInserted => {
-                console.log(userInserted)
-                res.status(201).json({
-                    message: "signup FB success",
-                    data: userInserted
-                })
-            })
-            .catch( error => {
-                const message = error.response.data
-                console.log(error)
-            })
-    },
-
     userSignIn: ( req, res ) => {
         User.findOne({
             email: req.body.email
         })
         .then( userSelected => {
-            // console.log(userSelected)
-            let cekPass = bcrypt.compareSync(req.body.password, userSelected.password)
+            let isLoginMedsos = req.body.isMedsos
+            // console.log('****************************',isLoginMedsos)
+            let cekPass
+            if(isLoginMedsos) {
+                // console.log('masuk di sini coy...')
+                cekPass = bcrypt.compareSync(passDefault, userSelected.password)
+            } else {
+                cekPass = bcrypt.compareSync(req.body.password, userSelected.password)
+            }
+            
+            // console.log('<<<<<<<<<<<<<<<<', cekPass)
             if(cekPass){
                 let token = jwt.sign({
                     id: userSelected._id,
@@ -93,22 +82,6 @@ module.exports = {
         })
         .catch( error => {
             // const message = error.respone.data
-            res.send(error)
-        })
-    },
-
-    userSignInFB: ( req, res ) => {
-        User.findOne({
-            email: req.body.email
-        })
-        .then( userSelected => {
-            // console.log(userSelected)
-                res.status(200).json({
-                    message: "User signIn",
-                    token: token
-                })
-        })
-        .catch( error => {
             res.send(error)
         })
     },

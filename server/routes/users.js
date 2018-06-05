@@ -2,26 +2,26 @@ const express = require('express')
 const router = express.Router()
 const {
   userSignUp,
-  userSignUpFB,
+  userSignUpMedsos,
   userSignIn,
-  userSignInFB,
+  userSignInMedsos,
   showTodo,
   inputTodo,
   updateTodo,
   deleteTodo
  } = require('../controllers/user.controller')
-const {
-  isLogin  
-} = require('../middleware/decodeToken')
+const { isLogin } = require('../middleware/decodeToken')
+const { isRegistered } = require('../middleware/isRegistered')
 
 // ROUTING
 router.get('/', function(req, res, next) {
   res.send('respond with a resource')
 })
+// router.post('/signupMedsos', userSignUpMedsos)
+// router.post('/signupMedsos', userSignUpMedsos)
+// router.post('/signinfb', userSignInFB)
 router.post('/signup', userSignUp)
-router.post('/signupfb', userSignUpFB)
-router.post('/signin', userSignIn)
-router.post('/signinfb', userSignInFB)
+router.post('/signin', isRegistered, userSignIn)
 router.get('/showtodo', isLogin, showTodo)
 router.post('/inputtodo', isLogin, inputTodo)
 router.put('/update/:id', isLogin, updateTodo)
